@@ -1,0 +1,14 @@
+{
+  "BigWig.chr_size": "/groups/cgsd/alexandre/eclip/workflow/chrom.sizes",
+  "BigWig.bams": [
+    "/groups/cgsd/alexandre/cromwell-executions/Eclip_from_Akshay_bams/f355824c-d131-4077-ac49-9b5877ee7dba/call-View/shard-0/execution/10249_sample1_10249_sample2_ready.bam",
+    "/groups/cgsd/alexandre/cromwell-executions/Eclip_from_Akshay_bams/f355824c-d131-4077-ac49-9b5877ee7dba/call-View/shard-1/execution/10249_sample3_10249_sample4_ready.bam",
+    "/groups/cgsd/alexandre/cromwell-executions/Eclip_from_Akshay_bams/f355824c-d131-4077-ac49-9b5877ee7dba/call-View/shard-2/execution/10249_sample5_10249_sample6_ready.bam",
+    "/groups/cgsd/alexandre/cromwell-executions/Eclip_from_Akshay_bams/f355824c-d131-4077-ac49-9b5877ee7dba/call-View/shard-3/execution/10249_sample7_10249_sample8_ready.bam",
+    "/groups/cgsd/alexandre/cromwell-executions/Eclip_from_Akshay_bams/f355824c-d131-4077-ac49-9b5877ee7dba/call-View/shard-4/execution/10249_sample9_10249_sample10_ready.bam",
+    "/groups/cgsd/alexandre/cromwell-executions/Eclip_from_Akshay_bams/f355824c-d131-4077-ac49-9b5877ee7dba/call-View/shard-5/execution/10249_sample11_10249_sample12_ready.bam",
+    "/groups/cgsd/alexandre/cromwell-executions/Eclip_from_Akshay_bams/f355824c-d131-4077-ac49-9b5877ee7dba/call-View/shard-6/execution/10249_sample13_10249_sample14_ready.bam",
+    "/groups/cgsd/alexandre/cromwell-executions/Eclip_from_Akshay_bams/f355824c-d131-4077-ac49-9b5877ee7dba/call-View/shard-7/execution/10249_sample15_10249_sample16_ready.bam"
+  ]
+}
+
