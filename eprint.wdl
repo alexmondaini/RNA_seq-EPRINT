@@ -74,8 +74,8 @@ task CutAdapt {
     String right_r2 = basename(fastq_r2,'.gz')
 
     command <<<
-    source /groups/cgsd/alexandre/miniconda3/etc/profile.d/conda.sh 
-    conda activate stepbystep
+    source /miniconda/etc/profile.d/conda.sh 
+    conda activate eprint
     cutadapt --match-read-wildcards --times 1 -e 0.1 -O 1 --quality-cutoff 6,6 -m 18 \
     -a ~{barcode} \
     -g ~{barcode} \
@@ -105,8 +105,8 @@ task FastQC_round1 {
         File fastqc_r2
     }
     command <<<
-    source /groups/cgsd/alexandre/miniconda3/etc/profile.d/conda.sh 
-    conda activate stepbystep
+    source /miniconda/etc/profile.d/conda.sh 
+    conda activate eprint
     fastqc -t 2 --extract -k 7 ~{fastqc_r1} -o .
     fastqc -t 2 --extract -k 7 ~{fastqc_r2} -o .
     >>>
@@ -127,8 +127,8 @@ task CutAdapt_round2 {
     String round2_right_r2 = basename(round1_right_r2,'fq') + 'round2.fq'
 
     command <<<
-    source /groups/cgsd/alexandre/miniconda3/etc/profile.d/conda.sh 
-    conda activate stepbystep
+    source /miniconda/etc/profile.d/conda.sh 
+    conda activate eprint
     cutadapt --match-read-wildcards --times 1 -e 0.1 -O 1 --quality-cutoff 6,6 -m 18 \
     -a ~{barcode} \
     -g ~{barcode} \
@@ -157,8 +157,8 @@ task FastQC_round2 {
         File fastqc_round2_r2
     }
     command <<<
-    source /groups/cgsd/alexandre/miniconda3/etc/profile.d/conda.sh 
-    conda activate stepbystep
+    source /miniconda/etc/profile.d/conda.sh 
+    conda activate eprint
     fastqc -t 2 --extract -k 7 ~{fastqc_round2_r1} -o .
     fastqc -t 2 --extract -k 7 ~{fastqc_round2_r2} -o .
     >>>
@@ -179,8 +179,8 @@ task FastQ_sort {
     String sorted_r2 = basename(fastq_sort_r2,'.fq') + '.sorted.fq' 
 
     command <<<
-    source /groups/cgsd/alexandre/miniconda3/etc/profile.d/conda.sh 
-    conda activate stepbystep
+    source /miniconda/etc/profile.d/conda.sh 
+    conda activate eprint
     fastq-sort --id ~{fastq_sort_r1} > ~{sorted_r1}
     fastq-sort --id ~{fastq_sort_r2} > ~{sorted_r2}
     >>>
@@ -207,8 +207,8 @@ task STAR_rmRep {
     command <<<
     mkdir RepElements
     tar -xzf ~{zipped_star_files} -C RepElements
-    source /groups/cgsd/alexandre/miniconda3/etc/profile.d/conda.sh 
-    conda activate stepbystep
+    source /miniconda/etc/profile.d/conda.sh 
+    conda activate eprint
     STAR \
     --runMode alignReads \
     --runThreadN 8 \
@@ -250,8 +250,8 @@ task FastQ_sort_STAR_unmapped {
     String sorted_r2 = basename(unmapped_to_sort_r2,'Unmapped.out.mate2') + 'r2_.fq' 
 
     command <<<
-    source /groups/cgsd/alexandre/miniconda3/etc/profile.d/conda.sh 
-    conda activate stepbystep
+    source /miniconda/etc/profile.d/conda.sh 
+    conda activate eprint
     fastq-sort --id ~{unmapped_to_sort_r1} > ~{sorted_r1}
     fastq-sort --id ~{unmapped_to_sort_r2} > ~{sorted_r2}
     >>>
@@ -276,8 +276,8 @@ task STAR_genome_map {
     command <<<
     mkdir HG_19_DIR
     tar -xzf ~{zipped_star_files_to_hg19} -C HG_19_DIR
-    source /groups/cgsd/alexandre/miniconda3/etc/profile.d/conda.sh 
-    conda activate stepbystep
+    source /miniconda/etc/profile.d/conda.sh 
+    conda activate eprint
     STAR \
     --runMode alignReads \
     --runThreadN 8 \
