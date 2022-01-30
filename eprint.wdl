@@ -12,6 +12,7 @@ workflow Eclip {
         Array[FastaSamples] samples
         File zipped_star_files
         File zipped_star_files_to_hg19
+        String docker="mondhongkong/rna_seq:latest"
     }
     
     scatter (sample in samples) {
@@ -90,6 +91,7 @@ task CutAdapt {
     runtime {
         cpu: 3
         memory: "6 GB"
+        docker: docker
     }
 
     output {
@@ -113,6 +115,7 @@ task FastQC_round1 {
     runtime {
         cpu: 3
         memory: "5 GB"
+        docker: docker
     }
 }
 
@@ -143,6 +146,7 @@ task CutAdapt_round2 {
     runtime {
         cpu: 3
         memory: "6 GB"
+        docker: docker
     }
 
     output {
@@ -166,6 +170,7 @@ task FastQC_round2 {
     runtime {
         cpu: 3
         memory: "5 GB"
+        docker: docker
     }
 
 }
@@ -187,6 +192,7 @@ task FastQ_sort {
     runtime {
         cpu: 3
         memory: "5 GB"
+        docker: docker
     }
     output {
         File result_fastq_sort_left = "${sorted_r1}"
@@ -233,6 +239,7 @@ task STAR_rmRep {
     runtime {
         cpu: 4
         memory: "20 GB"
+        docker: docker
     }
     output {
         File result_star_fq_r1 = "${prefix}Unmapped.out.mate1"
@@ -258,6 +265,7 @@ task FastQ_sort_STAR_unmapped {
     runtime {
         cpu: 3
         memory: "5 GB"
+        docker: docker
     }
     output {
         File result_fastq_sort_after_rmRep_r1 = "${sorted_r1}"
@@ -302,6 +310,7 @@ task STAR_genome_map {
     runtime {
         cpu: 4
         memory: "30 GB"
+        docker: docker
     }
     output {
         File result_star_hg19_fq_r1 = "${prefix}Unmapped.out.mate1"
