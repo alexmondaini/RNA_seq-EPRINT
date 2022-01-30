@@ -1,8 +1,10 @@
 {
-    "Eclip.zipped_star_files": "/groups/cgsd/alexandre/eclip/workflow/RepElements/all_files_tarred.tar.gz",
-    "Eclip.zipped_star_files_to_hg19": "/groups/cgsd/alexandre/eclip/workflow/GenomeDir/hg19_tar_files.tar.gz",
-    "Eclip.samples": [
-    {"fastq_r1":"/groups/cgsd/javed/Akshay/fastq/01_raw_reads/10249_sample1_r1.fq.gz","fastq_r2":"/groups/cgsd/javed/Akshay/fastq/01_raw_reads/10249_sample1_r2.fq.gz","barcode":"ATCACG"}
+  "Eclip.zipped_star_files": "/groups/cgsd/alexandre/eclip/workflow/RepElements/rep_elements.tar.gz",
+  "Eclip.zipped_star_files_to_hg19": "/groups/cgsd/alexandre/eclip/workflow/GenomeDir/hg19.tar.gz",
+  "Eclip.samples": [
+  {"fastq_r1":"/groups/cgsd/javed/Akshay/fastq/01_raw_reads/10249_sample1_r1.fq.gz",
+  "fastq_r2":"/groups/cgsd/javed/Akshay/fastq/01_raw_reads/10249_sample1_r2.fq.gz",
+  "barcode":"ATCACG"}
   ]
 }
   
