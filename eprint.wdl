@@ -12,7 +12,6 @@ workflow Eclip {
         Array[FastaSamples] samples
         File zipped_star_files
         File zipped_star_files_to_hg19
-        String docker="mondhongkong/rna_seq:latest"
     }
     
     scatter (sample in samples) {
@@ -36,7 +35,8 @@ workflow Eclip {
     call FastQC_round2 {
         input:
         fastqc_round2_r1 = CutAdapt_round2.result_round2_cutadapt_left,
-        fastqc_round2_r2 = CutAdapt_round2.result_round2_cutadapt_right
+        fastqc_round2_r2 = CutAdapt_round2.result_round2_cutadapt_right,
+        
     }
     call FastQ_sort {
         input:
@@ -75,7 +75,7 @@ task CutAdapt {
     String right_r2 = basename(fastq_r2,'.gz')
 
     command <<<
-    source /miniconda/etc/profile.d/conda.sh 
+    eval "$(conda shell.bash hook)" 
     conda activate eprint
     cutadapt --match-read-wildcards --times 1 -e 0.1 -O 1 --quality-cutoff 6,6 -m 18 \
     -a ~{barcode} \
@@ -91,7 +91,7 @@ task CutAdapt {
     runtime {
         cpu: 3
         memory: "6 GB"
-        docker: docker
+        
     }
 
     output {
@@ -105,9 +105,10 @@ task FastQC_round1 {
     input {
         File fastqc_r1
         File fastqc_r2
+        
     }
     command <<<
-    source /miniconda/etc/profile.d/conda.sh 
+    eval "$(conda shell.bash hook)" 
     conda activate eprint
     fastqc -t 2 --extract -k 7 ~{fastqc_r1} -o .
     fastqc -t 2 --extract -k 7 ~{fastqc_r2} -o .
@@ -115,7 +116,7 @@ task FastQC_round1 {
     runtime {
         cpu: 3
         memory: "5 GB"
-        docker: docker
+        
     }
 }
 
@@ -124,13 +125,14 @@ task CutAdapt_round2 {
         File round1_left_r1
         File round1_right_r2
         String barcode
+        
     }
 
     String round2_left_r1 = basename(round1_left_r1,'fq') + 'round2.fq'
     String round2_right_r2 = basename(round1_right_r2,'fq') + 'round2.fq'
 
     command <<<
-    source /miniconda/etc/profile.d/conda.sh 
+    eval "$(conda shell.bash hook)" 
     conda activate eprint
     cutadapt --match-read-wildcards --times 1 -e 0.1 -O 1 --quality-cutoff 6,6 -m 18 \
     -a ~{barcode} \
@@ -146,7 +148,7 @@ task CutAdapt_round2 {
     runtime {
         cpu: 3
         memory: "6 GB"
-        docker: docker
+        
     }
 
     output {
@@ -159,9 +161,10 @@ task FastQC_round2 {
     input {
         File fastqc_round2_r1
         File fastqc_round2_r2
+        
     }
     command <<<
-    source /miniconda/etc/profile.d/conda.sh 
+    eval "$(conda shell.bash hook)" 
     conda activate eprint
     fastqc -t 2 --extract -k 7 ~{fastqc_round2_r1} -o .
     fastqc -t 2 --extract -k 7 ~{fastqc_round2_r2} -o .
@@ -170,7 +173,7 @@ task FastQC_round2 {
     runtime {
         cpu: 3
         memory: "5 GB"
-        docker: docker
+        
     }
 
 }
@@ -179,12 +182,13 @@ task FastQ_sort {
     input {
         File fastq_sort_r1
         File fastq_sort_r2
+        
     }
     String sorted_r1 = basename(fastq_sort_r1,'.fq') + '.sorted.fq'
     String sorted_r2 = basename(fastq_sort_r2,'.fq') + '.sorted.fq' 
 
     command <<<
-    source /miniconda/etc/profile.d/conda.sh 
+    eval "$(conda shell.bash hook)" 
     conda activate eprint
     fastq-sort --id ~{fastq_sort_r1} > ~{sorted_r1}
     fastq-sort --id ~{fastq_sort_r2} > ~{sorted_r2}
@@ -192,7 +196,7 @@ task FastQ_sort {
     runtime {
         cpu: 3
         memory: "5 GB"
-        docker: docker
+        
     }
     output {
         File result_fastq_sort_left = "${sorted_r1}"
@@ -206,6 +210,7 @@ task STAR_rmRep {
         File zipped_star_files
         File fastq_starrep_r1
         File fastq_starrep_r2
+        
     }
 
     String prefix = sub(basename(fastq_starrep_r1,'.fq'),'_r1','') + "_STAR_"
@@ -213,11 +218,11 @@ task STAR_rmRep {
     command <<<
     mkdir RepElements
     tar -xzf ~{zipped_star_files} -C RepElements
-    source /miniconda/etc/profile.d/conda.sh 
+    eval "$(conda shell.bash hook)" 
     conda activate eprint
     STAR \
     --runMode alignReads \
-    --runThreadN 8 \
+    --runThreadN 6 \
     --genomeDir RepElements \
     --genomeLoad NoSharedMemory \
     --alignEndsType EndToEnd \
@@ -239,7 +244,6 @@ task STAR_rmRep {
     runtime {
         cpu: 4
         memory: "20 GB"
-        docker: docker
     }
     output {
         File result_star_fq_r1 = "${prefix}Unmapped.out.mate1"
@@ -252,12 +256,13 @@ task FastQ_sort_STAR_unmapped {
     input {
         File unmapped_to_sort_r1
         File unmapped_to_sort_r2
+        
     }
     String sorted_r1 = basename(unmapped_to_sort_r1,'Unmapped.out.mate1') + 'r1_.fq'
     String sorted_r2 = basename(unmapped_to_sort_r2,'Unmapped.out.mate2') + 'r2_.fq' 
 
     command <<<
-    source /miniconda/etc/profile.d/conda.sh 
+    eval "$(conda shell.bash hook)" 
     conda activate eprint
     fastq-sort --id ~{unmapped_to_sort_r1} > ~{sorted_r1}
     fastq-sort --id ~{unmapped_to_sort_r2} > ~{sorted_r2}
@@ -265,7 +270,7 @@ task FastQ_sort_STAR_unmapped {
     runtime {
         cpu: 3
         memory: "5 GB"
-        docker: docker
+        
     }
     output {
         File result_fastq_sort_after_rmRep_r1 = "${sorted_r1}"
@@ -284,11 +289,11 @@ task STAR_genome_map {
     command <<<
     mkdir HG_19_DIR
     tar -xzf ~{zipped_star_files_to_hg19} -C HG_19_DIR
-    source /miniconda/etc/profile.d/conda.sh 
+    eval "$(conda shell.bash hook)" 
     conda activate eprint
     STAR \
     --runMode alignReads \
-    --runThreadN 8 \
+    --runThreadN 6 \
     --genomeDir  HG_19_DIR \
     --genomeLoad NoSharedMemory \
     --readFilesIn ~{sorted_star_fq_r1} ~{sorted_star_fq_r2} \
@@ -310,7 +315,6 @@ task STAR_genome_map {
     runtime {
         cpu: 4
         memory: "30 GB"
-        docker: docker
     }
     output {
         File result_star_hg19_fq_r1 = "${prefix}Unmapped.out.mate1"

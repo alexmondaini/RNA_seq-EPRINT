@@ -1,9 +1,9 @@
 {
-  "Eclip.zipped_star_files": "/home/alex/RNA_seq-EPRINT/rep_elements.tar.gz",
-  "Eclip.zipped_star_files_to_hg19": "/home/alex/RNA_seq-EPRINT/hg19.tar.gz",
+  "Eclip.zipped_star_files": "/RNA/rep_elements.tar.gz",
+  "Eclip.zipped_star_files_to_hg19": "/RNA/hg19.tar.gz",
   "Eclip.samples": [
-  {"fastq_r1":"/groups/cgsd/javed/Akshay/fastq/01_raw_reads/10249_sample1_r1.fq.gz",
-  "fastq_r2":"/groups/cgsd/javed/Akshay/fastq/01_raw_reads/10249_sample1_r2.fq.gz",
+  {"fastq_r1":"/RNA/10249_sample1_r1.fq.gz",
+  "fastq_r2":"/RNA/10249_sample1_r2.fq.gz",
   "barcode":"ATCACG"}
   ]
 }
