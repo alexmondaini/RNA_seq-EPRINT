@@ -1,0 +1,15 @@
+ARG UBUNTU_VER=18.04
+ARG ME=alex
+
+FROM ubuntu:${UBUNTU_VER}
+
+# System packages
+# RUN apt-get update && apt-get install -yq curl wget jq vim nano openjdk-11-jdk
+
+ARG ME
+# build image with bash as the default shell
+SHELL ["/bin/bash", "-c"]
+# add user in the image
+RUN useradd -u 1000 ${ME} --create-home --shell /bin/bash
+USER ${ME}
+ 
