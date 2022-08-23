@@ -1,6 +1,6 @@
 version 1.0
 
-struct FastaSamples {
+struct Samples {
     File fastq_r1
     File fastq_r2
     String barcode    
@@ -9,17 +9,16 @@ struct FastaSamples {
 workflow Eclip {
     
     input {
-        Array[FastaSamples] samples
+        Samples samples
         File zipped_star_files
         File zipped_star_files_to_hg19
     }
     
-    scatter (sample in samples) {
     call CutAdapt {
         input:
-        fastq_r1 = sample.fastq_r1,
-        fastq_r2 = sample.fastq_r2,
-        barcode = sample.barcode
+        fastq_r1 = samples.fastq_r1,
+        fastq_r2 = samples.fastq_r2,
+        barcode = samples.barcode
     }
     call FastQC_round1 {
         input:
@@ -30,7 +29,7 @@ workflow Eclip {
         input:
         round1_left_r1 = CutAdapt.result_round1_cutadapt_left,
         round1_right_r2 = CutAdapt.result_round1_cutadapt_right,
-        barcode = sample.barcode
+        barcode = samples.barcode
     }
     call FastQC_round2 {
         input:
@@ -61,7 +60,6 @@ workflow Eclip {
         zipped_star_files_to_hg19 = zipped_star_files_to_hg19
     }
     }
-}
 
 task CutAdapt {
     
@@ -90,8 +88,7 @@ task CutAdapt {
 
     runtime {
         cpu: 3
-        memory: "6 GB"
-        
+        memory: "6 GB" 
     }
 
     output {
@@ -105,7 +102,6 @@ task FastQC_round1 {
     input {
         File fastqc_r1
         File fastqc_r2
-        
     }
     command <<<
     eval "$(conda shell.bash hook)" 
@@ -116,7 +112,6 @@ task FastQC_round1 {
     runtime {
         cpu: 3
         memory: "5 GB"
-        
     }
 }
 
@@ -125,7 +120,6 @@ task CutAdapt_round2 {
         File round1_left_r1
         File round1_right_r2
         String barcode
-        
     }
 
     String round2_left_r1 = basename(round1_left_r1,'fq') + 'round2.fq'
@@ -148,7 +142,6 @@ task CutAdapt_round2 {
     runtime {
         cpu: 3
         memory: "6 GB"
-        
     }
 
     output {
@@ -172,8 +165,7 @@ task FastQC_round2 {
     
     runtime {
         cpu: 3
-        memory: "5 GB"
-        
+        memory: "5 GB" 
     }
 
 }
@@ -196,7 +188,6 @@ task FastQ_sort {
     runtime {
         cpu: 3
         memory: "5 GB"
-        
     }
     output {
         File result_fastq_sort_left = "${sorted_r1}"
@@ -209,8 +200,7 @@ task STAR_rmRep {
     input {
         File zipped_star_files
         File fastq_starrep_r1
-        File fastq_starrep_r2
-        
+        File fastq_starrep_r2  
     }
 
     String prefix = sub(basename(fastq_starrep_r1,'.fq'),'_r1','') + "_STAR_"
