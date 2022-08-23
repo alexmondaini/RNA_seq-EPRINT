@@ -1,5 +1,5 @@
 {
-  "Call_Peaks.chr_size": "/groups/cgsd/alexandre/eclip/workflow/chrom.sizes",
+  "Call_Peaks.chr_size": "/groups/cgsd/alexandre/EPRINT_workflow/inputs/hg19.chrom.sizes",
   "Call_Peaks.samples": [
     "/groups/cgsd/alexandre/cromwell-executions/Eclip/68317c70-df8e-4de9-a931-650981d2e68c/call-STAR_genome_map/shard-0/execution/10249_sample1.round2.sorted_STAR_hg19Aligned.out.bam",
     "/groups/cgsd/alexandre/cromwell-executions/Eclip/68317c70-df8e-4de9-a931-650981d2e68c/call-STAR_genome_map/shard-1/execution/10249_sample2.round2.sorted_STAR_hg19Aligned.out.bam",

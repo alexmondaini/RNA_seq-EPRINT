@@ -1,0 +1,10 @@
+{
+  "Eprint.hg19_tar": "/groups/cgsd/alexandre/EPRINT_workflow/inputs/HG19.tar",
+  "Eprint.hg19_dup_tar": "/groups/cgsd/alexandre/EPRINT_workflow/inputs/REP.tar",
+  "Eprint.samples": {
+    "fastq_r1": "File",
+    "fastq_r2": "File",
+    "barcode": "String"
+  }
+}
+

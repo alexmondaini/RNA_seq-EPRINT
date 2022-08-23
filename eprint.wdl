@@ -6,12 +6,12 @@ struct Samples {
     String barcode    
 }
 
-workflow Eclip {
+workflow Eprint {
     
     input {
         Samples samples
-        File zipped_star_files
-        File zipped_star_files_to_hg19
+        File hg19_dup_tar
+        File hg19_tar
     }
     
     call CutAdapt {
@@ -46,7 +46,7 @@ workflow Eclip {
         input:
         fastq_starrep_r1 = FastQ_sort.result_fastq_sort_left,
         fastq_starrep_r2 = FastQ_sort.result_fastq_sort_right,
-        zipped_star_files = zipped_star_files
+        hg19_dup_tar = hg19_dup_tar
     }
     call FastQ_sort_STAR_unmapped {
         input:
@@ -57,7 +57,7 @@ workflow Eclip {
         input:
         sorted_star_fq_r1 = FastQ_sort_STAR_unmapped.result_fastq_sort_after_rmRep_r1,
         sorted_star_fq_r2 = FastQ_sort_STAR_unmapped.result_fastq_sort_after_rmRep_r2,
-        zipped_star_files_to_hg19 = zipped_star_files_to_hg19
+        hg19_tar = hg19_tar
     }
     }
 
@@ -198,7 +198,7 @@ task FastQ_sort {
 
 task STAR_rmRep {
     input {
-        File zipped_star_files
+        File hg19_dup_tar
         File fastq_starrep_r1
         File fastq_starrep_r2  
     }
@@ -207,7 +207,7 @@ task STAR_rmRep {
 
     command <<<
     mkdir RepElements
-    tar -xzf ~{zipped_star_files} -C RepElements
+    tar -xzf ~{hg19_dup_tar} -C RepElements
     eval "$(conda shell.bash hook)" 
     conda activate eprint
     STAR \
@@ -272,13 +272,13 @@ task STAR_genome_map {
     input {
         File sorted_star_fq_r1
         File sorted_star_fq_r2
-        File zipped_star_files_to_hg19
+        File hg19_tar
     }
     String prefix = basename(sorted_star_fq_r1,'r1_.fq') + 'hg19'
 
     command <<<
     mkdir HG_19_DIR
-    tar -xzf ~{zipped_star_files_to_hg19} -C HG_19_DIR
+    tar -xzf ~{hg19_tar} -C HG_19_DIR
     eval "$(conda shell.bash hook)" 
     conda activate eprint
     STAR \
