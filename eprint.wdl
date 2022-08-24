@@ -59,6 +59,7 @@ workflow Eprint {
         sorted_star_fq_r2 = FastQ_sort_STAR_unmapped.result_fastq_sort_after_rmRep_r2,
         hg19_tar = hg19_tar
     }
+    
     }
 
 task CutAdapt {
