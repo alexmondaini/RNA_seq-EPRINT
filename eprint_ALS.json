@@ -1,0 +1,9 @@
+{
+  "Eprint.hg19_tar": "/groups/cgsd/alexandre/EPRINT_workflow/inputs/HG19.tar",
+  "Eprint.hg19_dup_tar": "/groups/cgsd/alexandre/EPRINT_workflow/inputs/REP.tar",
+  "Eprint.samples": {
+    "fastq_r2": "/groups/cgsd/javed/Akshay/fastq/01_raw_reads/10249_sample1_r2.fq.gz",
+    "barcode": "String"
+  }
+}
+
