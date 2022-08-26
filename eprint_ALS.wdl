@@ -131,7 +131,8 @@ task FastQ_sort {
     command <<<
     eval "$(conda shell.bash hook)" 
     conda activate eprint
-    fastq-sort --id ~{cut_r2} > ~{sorted_r2}.fastq
+    gzip -d ~{cut_r2} > ~{sorted_r2}.fastq
+    fastq-sort --id ~{sorted_r2}.fastq > ~{sorted_r2}.fq
     >>>
 
     runtime {
@@ -140,7 +141,7 @@ task FastQ_sort {
     }
 
     output {
-        File fastq_sort_r2 = "~{sorted_r2}.fastq"
+        File fastq_sort_r2 = "~{sorted_r2}.fq"
      }
 }
 
@@ -151,7 +152,7 @@ task STAR_rmRep {
         File hg19_dup_tar
     }
 
-    String prefix = basename(sorted_cut_r2,'fastq')
+    String prefix = basename(sorted_cut_r2,'fq')
 
     command <<<
     mkdir RepElements
@@ -160,7 +161,7 @@ task STAR_rmRep {
     conda activate eprint
     STAR \
     --runMode alignReads \
-    --runThreadN 6 \
+    --runThreadN 40 \
     --genomeDir RepElements \
     --genomeLoad NoSharedMemory \
     --alignEndsType EndToEnd \
@@ -180,8 +181,8 @@ task STAR_rmRep {
     --readFilesIn ~{sorted_cut_r2}
     >>>
     runtime {
-        cpu: 4
-        memory: "20 GB"
+        cpu: 40
+        memory: "60 GB"
     }
     output {
         File star_r2 = "~{prefix}Unmapped.out.mate2"
