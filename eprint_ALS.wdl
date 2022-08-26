@@ -155,7 +155,7 @@ task STAR_rmRep {
 
     command <<<
     mkdir RepElements
-    tar -xf ~{hg19_dup_tar} -C RepElements
+    tar -xf ~{hg19_dup_tar}
     eval "$(conda shell.bash hook)" 
     conda activate eprint
     STAR \
