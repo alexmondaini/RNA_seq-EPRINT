@@ -131,7 +131,7 @@ task FastQ_sort {
     command <<<
     eval "$(conda shell.bash hook)" 
     conda activate eprint
-    fastq-sort --id ~{cut_r2} > ~{sorted_r2}.fastq.gz
+    fastq-sort --id ~{cut_r2} > ~{sorted_r2}.fastq
     >>>
 
     runtime {
@@ -140,7 +140,7 @@ task FastQ_sort {
     }
 
     output {
-        File fastq_sort_r2 = "~{sorted_r2}.fastq.gz"
+        File fastq_sort_r2 = "~{sorted_r2}.fastq"
      }
 }
 
@@ -151,7 +151,7 @@ task STAR_rmRep {
         File hg19_dup_tar
     }
 
-    String prefix = basename(sorted_cut_r2,'fastq.gz')
+    String prefix = basename(sorted_cut_r2,'fastq')
 
     command <<<
     mkdir RepElements
