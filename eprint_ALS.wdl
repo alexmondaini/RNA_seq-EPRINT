@@ -30,6 +30,12 @@ workflow Eprint {
         input:
         cut_r2 = CutAdapt.cut_r2
     }
+
+    call FastQ_sort {
+        input:
+        cut_r2 = CutAdapt.cut_r2
+    }
+
 }
 
 task UmiTools {
@@ -75,7 +81,7 @@ task CutAdapt {
     conda activate eprint
     cutadapt \
     --cores=16 \
-    -g ~{sep="\\\n  -g" adapters} \
+    -g ~{sep="\\\n-g " adapters } \
     -o ~{r2}.fastq.gz \
     ~{umi_r2} 
     >>>
@@ -94,10 +100,13 @@ task FastQC {
     input {
         File cut_r2
     }
+
+    String r2 = basename(cut_r2,'.fastq.gz')
+
     command <<<
     eval "$(conda shell.bash hook)" 
     conda activate eprint
-    fastqc -t 2 --extract -k 7 ~{cut_r2} -o .
+    fastqc -t 2 --extract -k 7 ~{cut_r2} -o ~{r2}
     >>>
     runtime {
         cpu: 3
@@ -110,6 +119,7 @@ task FastQ_sort {
     input {
         File cut_r2
     }
+
     String sorted_r2 = basename(cut_r2,'.fastq.gz')
 
     command <<<
@@ -117,12 +127,14 @@ task FastQ_sort {
     conda activate eprint
     fastq-sort --id ~{cut_r2} > ~{sorted_r2}.fastq.gz
     >>>
+
     runtime {
         cpu: 6
         memory: "10 GB"
     }
+
     output {
-        File fastq_sort_r2 = "${sorted_r2}"
+        File fastq_sort_r2 = "~{sorted_r2}.fastq.gz"
      }
 }
 
