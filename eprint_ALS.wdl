@@ -38,7 +38,8 @@ workflow Eprint {
 
     call STAR_rmRep {
         input:
-        sorted_cut_r2 = FastQ_sort.fastq_sort_r2
+        sorted_cut_r2 = FastQ_sort.fastq_sort_r2,
+        hg19_dup_tar = hg19_dup_tar
     }
 
 }
