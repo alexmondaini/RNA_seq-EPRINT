@@ -112,7 +112,7 @@ task FastQC {
     command <<<
     eval "$(conda shell.bash hook)" 
     conda activate eprint
-    fastqc -t 2 --extract -k 7 ~{cut_r2} -o ~{r2}
+    fastqc -t 2 --extract -k 7 ~{cut_r2} -o .
     >>>
     runtime {
         cpu: 3
@@ -147,8 +147,8 @@ task FastQ_sort {
 
 task STAR_rmRep {
     input {
-        File hg19_dup_tar
         File sorted_cut_r2
+        File hg19_dup_tar
     }
 
     String prefix = basename(sorted_cut_r2,'fastq.gz')
