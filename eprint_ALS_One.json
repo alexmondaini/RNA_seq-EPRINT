@@ -1,0 +1,33 @@
+{
+    "Eprint.hg19_tar": "/groups/cgsd/alexandre/EPRINT_workflow/inputs/HG19.tar",
+    "Eprint.hg19_dup_tar": "/groups/cgsd/alexandre/EPRINT_workflow/inputs/REP.tar",
+    "Eprint.samples": {
+        "fastq_r2": "/groups/cgsd/alexandre/EPRINT_workflow/inputs/10774_ep/10774_ep10_S22_R2_001.fastq.gz",
+        "adapters": [
+            "NNNNNAGATCGGAAGAGCACACGTCTGAACTCCAGTCAC",
+            "CTTCCGATCTACAAGTT",
+            "CTTCCGATCTTGGTCCT",
+            "AACTTGTAGATCGGA",
+            "AGGACCAAGATCGGA",
+            "ACTTGTAGATCGGAA",
+            "GGACCAAGATCGGAA",
+            "CTTGTAGATCGGAAG",
+            "GACCAAGATCGGAAG",
+            "TTGTAGATCGGAAGA",
+            "ACCAAGATCGGAAGA",
+            "TGTAGATCGGAAGAG",
+            "CCAAGATCGGAAGAG",
+            "GTAGATCGGAAGAGC",
+            "CAAGATCGGAAGAGC",
+            "TAGATCGGAAGAGCG",
+            "AAGATCGGAAGAGCG",
+            "AGATCGGAAGAGCGT",
+            "GATCGGAAGAGCGTC",
+            "ATCGGAAGAGCGTCG",
+            "TCGGAAGAGCGTCGT",
+            "CGGAAGAGCGTCGTG",
+            "GGAAGAGCGTCGTGT"
+        ],
+        "bc_pattern": "NNNNNNNNNN"
+    }
+}

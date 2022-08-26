@@ -2,7 +2,8 @@ version 1.0
 
 struct Samples {
     File fastq_r2
-    String barcode    
+    Array[String] adapters
+    String bc_pattern    
 }
 
 workflow Eprint {
@@ -16,39 +17,38 @@ workflow Eprint {
     call UmiTools {
         input:
         fastq_r2 = samples.fastq_r2,
-        barcode = samples.barcode
+        bc_pattern = samples.bc_pattern
     }
     
     call CutAdapt {
         input:
         umi_r2 = UmiTools.umi_r2,
-        barcode = samples.barcode
+        adapters = samples.adapters
     }
 
-    # call FastQC {
-    #     input:
-    #     cut_r2 = CutAdapt.umi_r2 
-
-    # }
+    call FastQC {
+        input:
+        cut_r2 = CutAdapt.cut_r2
+    }
 }
 
 task UmiTools {
     input {
         File fastq_r2
-        String barcode  
+        String bc_pattern  
     }
 
-    String r2 = basename(fastq_r2,'.fq.gz')
+    String r2 = basename(fastq_r2,'.fastq.gz')
 
     command <<<
     eval "$(conda shell.bash hook)"
     conda activate eprint
     umi_tools extract \
     --random-seed 1 \
-    --bc-pattern NNNNNNNNNN \
+    --bc-pattern ~{bc_pattern} \
     --log ~{r2}.metrics \
     --stdin ~{fastq_r2} \
-    --stdout ~{r2}.fq.gz
+    --stdout ~{r2}.fastq.gz
     >>>
 
     runtime  {
@@ -57,7 +57,7 @@ task UmiTools {
     }
 
     output {
-        File umi_r2 = "~{r2}.fq.gz"
+        File umi_r2 = "~{r2}.fastq.gz"
     }
 }
 
@@ -65,21 +65,18 @@ task CutAdapt {
     
     input {
         File umi_r2
-        String barcode
+        Array[String] adapters
     }
     
-    String r2 = basename(umi_r2,'.fq.gz')
+    String r2 = basename(umi_r2,'.fastq.gz')
 
     command <<<
     eval "$(conda shell.bash hook)" 
     conda activate eprint
     cutadapt \
     --cores=16 \
-    -a ~{barcode} \
-    -g ~{barcode} \
-    -A ~{barcode} \
-    -G ~{barcode} \
-    -o ~{r2}.fq.gz \
+    -g ~{sep="\\\n  -g" adapters} \
+    -o ~{r2}.fastq.gz \
     ~{umi_r2} 
     >>>
 
@@ -89,106 +86,45 @@ task CutAdapt {
     }
 
     output {
-        File cut_r2 = "~{r2}.fq.gz"
+        File cut_r2 = "~{r2}.fastq.gz"
     }
 }
 
-# task FastQC {
-#     input {
-#         File fastqc_r1
-#         File fastqc_r2
-#     }
-#     command <<<
-#     eval "$(conda shell.bash hook)" 
-#     conda activate eprint
-#     fastqc -t 2 --extract -k 7 ~{fastqc_r1} -o .
-#     fastqc -t 2 --extract -k 7 ~{fastqc_r2} -o .
-#     >>>
-#     runtime {
-#         cpu: 3
-#         memory: "5 GB"
-#     }
-# }
+task FastQC {
+    input {
+        File cut_r2
+    }
+    command <<<
+    eval "$(conda shell.bash hook)" 
+    conda activate eprint
+    fastqc -t 2 --extract -k 7 ~{cut_r2} -o .
+    >>>
+    runtime {
+        cpu: 3
+        memory: "5 GB"
+    }
+}
 
-# task CutAdapt_round2 {
-#     input {
-#         File round1_left_r1
-#         File round1_right_r2
-#         String barcode
-#     }
 
-#     String round2_left_r1 = basename(round1_left_r1,'fq') + 'round2.fq'
-#     String round2_right_r2 = basename(round1_right_r2,'fq') + 'round2.fq'
+task FastQ_sort {
+    input {
+        File cut_r2
+    }
+    String sorted_r2 = basename(cut_r2,'.fastq.gz')
 
-#     command <<<
-#     eval "$(conda shell.bash hook)" 
-#     conda activate eprint
-#     cutadapt --match-read-wildcards --times 1 -e 0.1 -O 1 --quality-cutoff 6,6 -m 18 \
-#     -a ~{barcode} \
-#     -g ~{barcode} \
-#     -A ~{barcode} \
-#     -G ~{barcode} \
-#     -o ~{round2_left_r1} \
-#     -p ~{round2_right_r2} \
-#     ~{round1_left_r1} \
-#     ~{round1_right_r2}
-#     >>>
-
-#     runtime {
-#         cpu: 3
-#         memory: "6 GB"
-#     }
-
-#     output {
-#         File result_round2_cutadapt_left = "${round2_left_r1}" 
-#         File result_round2_cutadapt_right = "${round2_right_r2}"
-#     }
-# }
-
-# task FastQC_round2 {
-#     input {
-#         File fastqc_round2_r1
-#         File fastqc_round2_r2
-        
-#     }
-#     command <<<
-#     eval "$(conda shell.bash hook)" 
-#     conda activate eprint
-#     fastqc -t 2 --extract -k 7 ~{fastqc_round2_r1} -o .
-#     fastqc -t 2 --extract -k 7 ~{fastqc_round2_r2} -o .
-#     >>>
-    
-#     runtime {
-#         cpu: 3
-#         memory: "5 GB" 
-#     }
-
-# }
-
-# task FastQ_sort {
-#     input {
-#         File fastq_sort_r1
-#         File fastq_sort_r2
-        
-#     }
-#     String sorted_r1 = basename(fastq_sort_r1,'.fq') + '.sorted.fq'
-#     String sorted_r2 = basename(fastq_sort_r2,'.fq') + '.sorted.fq' 
-
-#     command <<<
-#     eval "$(conda shell.bash hook)" 
-#     conda activate eprint
-#     fastq-sort --id ~{fastq_sort_r1} > ~{sorted_r1}
-#     fastq-sort --id ~{fastq_sort_r2} > ~{sorted_r2}
-#     >>>
-#     runtime {
-#         cpu: 3
-#         memory: "5 GB"
-#     }
-#     output {
-#         File result_fastq_sort_left = "${sorted_r1}"
-#         File result_fastq_sort_right = "${sorted_r2}"
-#      }
-# }
+    command <<<
+    eval "$(conda shell.bash hook)" 
+    conda activate eprint
+    fastq-sort --id ~{cut_r2} > ~{sorted_r2}.fastq.gz
+    >>>
+    runtime {
+        cpu: 6
+        memory: "10 GB"
+    }
+    output {
+        File fastq_sort_r2 = "${sorted_r2}"
+     }
+}
 
 
 # task STAR_rmRep {
