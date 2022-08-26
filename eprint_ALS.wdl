@@ -36,6 +36,11 @@ workflow Eprint {
         cut_r2 = CutAdapt.cut_r2
     }
 
+    call STAR_rmRep {
+        input:
+        sorted_cut_r2 = FastQ_sort.fastq_sort_r2
+    }
+
 }
 
 task UmiTools {
@@ -81,7 +86,7 @@ task CutAdapt {
     conda activate eprint
     cutadapt \
     --cores=16 \
-    -g ~{sep="\\\n-g " adapters } \
+    -g ~{sep="\\\n -g " adapters } \
     -o ~{r2}.fastq.gz \
     ~{umi_r2} 
     >>>
@@ -139,51 +144,49 @@ task FastQ_sort {
 }
 
 
-# task STAR_rmRep {
-#     input {
-#         File hg19_dup_tar
-#         File fastq_starrep_r1
-#         File fastq_starrep_r2  
-#     }
+task STAR_rmRep {
+    input {
+        File hg19_dup_tar
+        File sorted_cut_r2
+    }
 
-#     String prefix = sub(basename(fastq_starrep_r1,'.fq'),'_r1','') + "_STAR_"
+    String prefix = basename(sorted_cut_r2,'fastq.gz')
 
-#     command <<<
-#     mkdir RepElements
-#     tar -xzf ~{hg19_dup_tar} -C RepElements
-#     eval "$(conda shell.bash hook)" 
-#     conda activate eprint
-#     STAR \
-#     --runMode alignReads \
-#     --runThreadN 6 \
-#     --genomeDir RepElements \
-#     --genomeLoad NoSharedMemory \
-#     --alignEndsType EndToEnd \
-#     --outSAMunmapped Within \
-#     --outFilterMultimapNmax 30 \
-#     --outFilterMultimapScoreRange 1 \
-#     --outFileNamePrefix ~{prefix} \
-#     --outSAMtype BAM Unsorted \
-#     --outFilterType BySJout \
-#     --outBAMcompression 10 \
-#     --outReadsUnmapped Fastx \
-#     --outFilterScoreMin 10 \
-#     --outSAMattrRGline ID:foo \
-#     --outSAMattributes All \
-#     --outSAMmode Full \
-#     --outStd Log \
-#     --readFilesIn ~{fastq_starrep_r1} ~{fastq_starrep_r2}
-#     >>>
-#     runtime {
-#         cpu: 4
-#         memory: "20 GB"
-#     }
-#     output {
-#         File result_star_fq_r1 = "${prefix}Unmapped.out.mate1"
-#         File result_star_fq_r2 = "${prefix}Unmapped.out.mate2"
-#         File result_star_bam = "${prefix}Aligned.out.bam"
-#     }
-# }
+    command <<<
+    mkdir RepElements
+    tar -xzf ~{hg19_dup_tar} -C RepElements
+    eval "$(conda shell.bash hook)" 
+    conda activate eprint
+    STAR \
+    --runMode alignReads \
+    --runThreadN 6 \
+    --genomeDir RepElements \
+    --genomeLoad NoSharedMemory \
+    --alignEndsType EndToEnd \
+    --outSAMunmapped Within \
+    --outFilterMultimapNmax 30 \
+    --outFilterMultimapScoreRange 1 \
+    --outFileNamePrefix ~{prefix} \
+    --outSAMtype BAM Unsorted \
+    --outFilterType BySJout \
+    --outBAMcompression 10 \
+    --outReadsUnmapped Fastx \
+    --outFilterScoreMin 10 \
+    --outSAMattrRGline ID:foo \
+    --outSAMattributes All \
+    --outSAMmode Full \
+    --outStd Log \
+    --readFilesIn ~{sorted_cut_r2}
+    >>>
+    runtime {
+        cpu: 4
+        memory: "20 GB"
+    }
+    output {
+        File star_r2 = "~{prefix}Unmapped.out.mate2"
+        File result_star_bam = "~{prefix}Aligned.out.bam"
+    }
+}
 
 # task FastQ_sort_STAR_unmapped {
 #     input {
