@@ -9,7 +9,7 @@ workflow Call_Peaks {
         
         String output_name = basename(sample,'.round2.sorted_STAR_hg19Aligned.out.bam')
 
-        call Sort_and_Index_Bam {
+        call Sort_Index_Bam {
             input:
             sort_star_bam = sample,
             result_sort = output_name + '_sort.bam',
@@ -20,16 +20,16 @@ workflow Call_Peaks {
             call_peak_bam = Sort_and_Index_Bam.result_sorted_indexed_bam,
             call_peak_bai = Sort_and_Index_Bam.result_sorted_indexed_bai
         }
-        call Wigs {
-            input:
-            wigs_bam = Sort_and_Index_Bam.result_sorted_indexed_bam,
-            wigs_bai = Sort_and_Index_Bam.result_sorted_indexed_bai,
-            chr_size = chr_size
-        }
+        # call Wigs {
+        #     input:
+        #     wigs_bam = Sort_and_Index_Bam.result_sorted_indexed_bam,
+        #     wigs_bai = Sort_and_Index_Bam.result_sorted_indexed_bai,
+        #     chr_size = chr_size
+        # }
     }
 }
 
-task Sort_and_Index_Bam {
+task Sort_Index_Bam {
     input {
         File sort_star_bam
         String result_sort
@@ -41,14 +41,14 @@ task Sort_and_Index_Bam {
     ln ~{sort_star_bam} ~{basename(sort_star_bam)}
     source /groups/cgsd/alexandre/miniconda3/etc/profile.d/conda.sh 
     conda activate eprint
-    samtools sort -o ~{result_sort} ~{basename(sort_star_bam)} 
+    samtools sort -O bam -m 2G -@ 20 -o ~{result_sort} ~{basename(sort_star_bam)} 
     samtools view -f 64 -b -o ~{result_view} ~{result_sort}
-    samtools index ~{result_view}
+    samtools index -b ~{result_view}
     >>>
 
     runtime {
-        cpu: 3
-        memory: "7 GB"
+        cpu: 20
+        memory: "40 GB"
     }
     output {
         File result_sorted_indexed_bam = result_view
@@ -72,40 +72,40 @@ task Clipper {
     >>>
     
     runtime {
-        cpu: 20
-        memory: "30 GB"
+        cpu: 16
+        memory: "60 GB"
         docker: "brianyee/clipper@sha256:094ede2a0ee7a6f2c2e07f436a8b63486dc4a072dbccad136b7a450363ab1876"
     }
 
 }
 
-task Wigs {
-    input {
-        File wigs_bam
-        File wigs_bai
-        File chr_size
-        String? direction
-    }
-    String bw_pos = basename(wigs_bam,'.bam') + '_norm_pos.bw'
-    String bw_neg = basename(wigs_bam,'.bam') + '_norm_neg.bw'
+# task Wigs {
+#     input {
+#         File wigs_bam
+#         File wigs_bai
+#         File chr_size
+#         String? direction
+#     }
+#     String bw_pos = basename(wigs_bam,'.bam') + '_norm_pos.bw'
+#     String bw_neg = basename(wigs_bam,'.bam') + '_norm_neg.bw'
 
-    command <<<
-    makebigwigfiles \
-    --bw_pos  ~{bw_pos} \
-    --bw_neg ~{bw_neg}  \
-    --bam  ~{wigs_bam} \
-    --genome ~{chr_size} \
-    --direction ~{default="r" direction}
-    >>>
+#     command <<<
+#     makebigwigfiles \
+#     --bw_pos  ~{bw_pos} \
+#     --bw_neg ~{bw_neg}  \
+#     --bam  ~{wigs_bam} \
+#     --genome ~{chr_size} \
+#     --direction ~{default="r" direction}
+#     >>>
 
-    runtime {
-        cpu: 20
-        memory: "30 GB"
-        docker: "brianyee/makebigwigfiles@sha256:8d67afc36e388aa12f1b6d2bed8ea3b6ddaa9ec4296a93d5fa9f31a5b1ff16d4"
-    }
+#     runtime {
+#         cpu: 20
+#         memory: "30 GB"
+#         docker: "brianyee/makebigwigfiles@sha256:8d67afc36e388aa12f1b6d2bed8ea3b6ddaa9ec4296a93d5fa9f31a5b1ff16d4"
+#     }
 
-    output {
-        File result_bw_pos = "${bw_pos}"
-        File result_bw_neg = "${bw_neg}"
-    }
-}
+#     output {
+#         File result_bw_pos = "${bw_pos}"
+#         File result_bw_neg = "${bw_neg}"
+#     }
+# }
