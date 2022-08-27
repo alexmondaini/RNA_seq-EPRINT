@@ -55,6 +55,17 @@ workflow Eprint {
         hg19_tar =hg19_tar
     }
 
+    call PCR_Dedup {
+        input:
+        star_hg19_bam = STAR_genome_map.star_hg19_bam
+    }
+
+    call Clipper {
+        input:
+        dedup_bam = PCR_Dedup.dedup_bam,
+        dedup_bai = PCR_Dedup.dedup_bai
+    }
+
 }
 
 task UmiTools {
@@ -270,5 +281,63 @@ task STAR_genome_map {
     output {
         File star_hg19_r2 = "${prefix}.Unmapped.out.mate2"
         File star_hg19_bam = "${prefix}.Aligned.out.bam"
+    }
+}
+
+task PCR_Dedup {
+    input {
+        File star_hg19_bam
+    }
+
+    String prefix = basename(star_hg19_bam,'_hg19.Aligned.out.bam')
+
+    command <<<
+    eval "$(conda shell.bash hook)" 
+    conda activate eprint
+    samtools sort -O bam -m 2G -@ 20 -o ~{prefix}.bam ~{star_hg19_bam}
+    samtools index -b ~{prefix}.bam
+    umi_tools dedup \
+    --random-seed 1 \
+    -I ~{prefix}.bam \
+    --method unique \
+    --output-stats ~{prefix}.stats \
+    -S ~{prefix}.dedup.bam
+    >>>
+
+    runtime {
+        cpu: 8
+        memory: "16 GB"
+    }
+
+    output {
+        File dedup_bam = "~{prefix}.dedup.bam"
+        File dedup_bai = "~{prefix}.bam.bai"
+    }
+}
+
+task Clipper {
+    
+    input {
+        File dedup_bam
+        File dedup_bai
+    }
+    
+    String bed_peak_intervals = basename(dedup_bam,'.dedup.bam') + '.bed'
+    
+    command <<<
+    clipper \
+    --species hg19 \
+    --processors=16 \
+    --plot \
+    -v \
+    -q \
+    --bam ~{dedup_bam} \
+    --outfile ~{bed_peak_intervals}
+    >>>
+    
+    runtime {
+        cpu: 16
+        memory: "60 GB"
+        docker: "brianyee/clipper@sha256:094ede2a0ee7a6f2c2e07f436a8b63486dc4a072dbccad136b7a450363ab1876"
     }
 }
