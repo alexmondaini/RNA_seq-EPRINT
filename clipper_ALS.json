@@ -1,4 +1,27 @@
 {
-  "Call_Peaks.samples": ["/groups/cgsd/alexandre/cromwell-executions/Eprint/1933ead9-3593-4436-ada9-95329445bc7e/call-STAR_genome_map/execution/10774_ep10_S22_R2_001_hg19.Aligned.out.bam"]
+    "Call_Peaks.samples": [
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_ep11_S23_R2_001/call-STAR_genome_map/execution/10774_ep11_S23_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_ep12_S24_R2_001/call-STAR_genome_map/execution/10774_ep12_S24_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_ep1_S13_R2_001/call-STAR_genome_map/execution/10774_ep1_S13_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_ep2_S14_R2_001/call-STAR_genome_map/execution/10774_ep2_S14_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_ep3_S15_R2_001/call-STAR_genome_map/execution/10774_ep3_S15_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_ep4_S16_R2_001/call-STAR_genome_map/execution/10774_ep4_S16_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_ep5_S17_R2_001/call-STAR_genome_map/execution/10774_ep5_S17_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_ep6_S18_R2_001/call-STAR_genome_map/execution/10774_ep6_S18_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_ep7_S19_R2_001/call-STAR_genome_map/execution/10774_ep7_S19_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_ep8_S20_R2_001/call-STAR_genome_map/execution/10774_ep8_S20_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_ep9_S21_R2_001/call-STAR_genome_map/execution/10774_ep9_S21_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_inpA_S1_R2_001/call-STAR_genome_map/execution/10774_inpA_S1_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_inpB_S2_R2_001/call-STAR_genome_map/execution/10774_inpB_S2_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_inpC_S3_R2_001/call-STAR_genome_map/execution/10774_inpC_S3_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_inpD_S4_R2_001/call-STAR_genome_map/execution/10774_inpD_S4_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_inpE_S5_R2_001/call-STAR_genome_map/execution/10774_inpE_S5_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_inpF_S6_R2_001/call-STAR_genome_map/execution/10774_inpF_S6_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_inpG_S7_R2_001/call-STAR_genome_map/execution/10774_inpG_S7_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_inpH_S8_R2_001/call-STAR_genome_map/execution/10774_inpH_S8_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_inpI_S9_R2_001/call-STAR_genome_map/execution/10774_inpI_S9_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_inpJ_S10_R2_001/call-STAR_genome_map/execution/10774_inpJ_S10_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_inpK_S11_R2_001/call-STAR_genome_map/execution/10774_inpK_S11_R2_001_hg19.Aligned.out.bam",
+        "/groups/cgsd/alexandre/cromwell-executions/Eprint/10774_inpL_S12_R2_001/call-STAR_genome_map/execution/10774_inpL_S12_R2_001_hg19.Aligned.out.bam"
+    ]
 }
-
