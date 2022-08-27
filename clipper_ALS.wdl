@@ -61,6 +61,10 @@ task Clipper {
     command <<<
     clipper \
     --species hg19 \
+    --processors=16 \
+    --plot \
+    -v \
+    -q \
     --bam ~{call_peak_bam} \
     --outfile ~{bed_peak_intervals}
     >>>
