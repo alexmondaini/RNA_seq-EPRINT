@@ -144,7 +144,7 @@ task FastQ_sort {
     command <<<
     eval "$(conda shell.bash hook)" 
     conda activate eprint
-    gzip -d ~{cut_r2} > ~{sorted_r2}.fastq
+    gunzip -c ~{cut_r2} > ~{sorted_r2}.fastq
     fastq-sort --id ~{sorted_r2}.fastq > ~{sorted_r2}.fq
     >>>
 
