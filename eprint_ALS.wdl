@@ -187,7 +187,7 @@ task STAR_rmRep {
     --outBAMcompression 10 \
     --outReadsUnmapped Fastx \
     --outFilterScoreMin 10 \
-    --outSAMattrRGline ID:foo \
+    --outSAMattrRGline ID:~{prefix} \
     --outSAMattributes All \
     --outSAMmode Full \
     --outStd Log \
@@ -233,7 +233,7 @@ task STAR_genome_map {
         File star_bam
         File hg19_tar
     }
-    String prefix = basename(sorted_start_r2,'_r2_.fq') + '_hg19.'
+    String prefix = basename(sorted_start_r2,'_r2_.fq') + '_hg19'
 
     command <<<
     mkdir HG_19_DIR
@@ -249,7 +249,7 @@ task STAR_genome_map {
     --outSAMunmapped Within \
     --outFilterMultimapNmax 1 \
     --outFilterMultimapScoreRange 1 \
-    --outFileNamePrefix ~{prefix} \
+    --outFileNamePrefix ~{prefix}. \
     --outSAMattributes All \
     --outSAMtype BAM Unsorted \
     --outFilterType BySJout \
