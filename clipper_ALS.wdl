@@ -44,7 +44,7 @@ task Sort_Index_Bam {
 
     output {
         File sorted_indexed_bam = "~{prefix}.bam"
-        File sorted_indexed_bai = "~{prefix}.bai"
+        File sorted_indexed_bai = "~{prefix}.bam.bai"
     }
 }
 
