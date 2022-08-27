@@ -98,7 +98,7 @@ task CutAdapt {
     command <<<
     eval "$(conda shell.bash hook)" 
     conda activate eprint
-    cutadapt \
+    cutadapt --match-read-wildcards --times 1 -e 0.1 -O 1 --quality-cutoff 6,6 -m 18 \
     --cores=16 \
     -g ~{sep="\\\n -g " adapters } \
     -o ~{r2}.fastq.gz \
