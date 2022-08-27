@@ -305,8 +305,8 @@ task PCR_Dedup {
     >>>
 
     runtime {
-        cpu: 8
-        memory: "16 GB"
+        cpu: 20
+        memory: "40 GB"
     }
 
     output {
