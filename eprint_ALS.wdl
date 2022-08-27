@@ -198,7 +198,7 @@ task STAR_rmRep {
         memory: "60 GB"
     }
     output {
-        File star_r2 = "~{prefix}Unmapped.out.mate2"
+        File star_r2 = "~{prefix}Unmapped.out.mate1"
         File star_bam = "~{prefix}Aligned.out.bam"
     }
 }
