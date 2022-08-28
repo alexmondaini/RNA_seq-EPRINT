@@ -279,7 +279,7 @@ task STAR_genome_map {
     }
 
     output {
-        File star_hg19_r2 = "${prefix}.Unmapped.out.mate2"
+        File star_hg19_r2 = "${prefix}.Unmapped.out.mate1"
         File star_hg19_bam = "${prefix}.Aligned.out.bam"
     }
 }
