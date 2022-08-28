@@ -328,7 +328,6 @@ task Clipper {
     clipper \
     --species hg19 \
     --processors=16 \
-    --plot \
     -v \
     -q \
     --bam ~{dedup_bam} \
